@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: ['./.env.local'] });
 
 export default {
-  branches: ['master'],
+  branches: ['main'],
   plugins: [
     [
       '@semantic-release/commit-analyzer',
