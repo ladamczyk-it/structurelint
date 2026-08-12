@@ -17,7 +17,7 @@ export default {
     entry: ['./src/index.{js,ts}', './src/cli.{js,ts}'],
     project: './src/**/*.{js,ts}',
     ignore: [
-      '**/rollup.*.js',
+      '**/rolldown.config.js',
       '**/vitest.config.js',
       'eslint.config.js',
       'qoq.config.js',
@@ -25,9 +25,7 @@ export default {
     ],
     ignoreDependencies: [
       // build specific
-      '@rollup/*',
-      'rollup-*',
-      'esbuild',
+      'rolldown',
       'dotenv',
       // package specific
       '@commitlint/cli',

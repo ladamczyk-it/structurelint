@@ -1,5 +1,5 @@
 import { EExitCode } from '@ladamczyk/qoq-utils';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ILintResult } from './types.ts';
 
@@ -17,9 +17,9 @@ const passingResult: ILintResult = { root: '.', passed: true, violations: [] };
 const cliArgv = process.argv;
 const originalArgv = [...cliArgv];
 
-let exitSpy: ReturnType<typeof vi.spyOn<typeof process, 'exit'>>;
-let stdoutSpy: ReturnType<typeof vi.spyOn<typeof process.stdout, 'write'>>;
-let stderrSpy: ReturnType<typeof vi.spyOn<typeof process.stderr, 'write'>>;
+let exitSpy: MockInstance;
+let stdoutSpy: MockInstance;
+let stderrSpy: MockInstance;
 
 beforeEach(() => {
   vi.resetModules();
