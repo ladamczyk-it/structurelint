@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ladamczyk-it/structurelint/compare/v1.0.1...v1.1.0) (2026-08-16)
+
+
+### Features
+
+* add stats + bump ([c362668](https://github.com/ladamczyk-it/structurelint/commit/c362668e24129ad016f41b14ae46d59aecf84cbf))
+
 ## [1.0.1](https://github.com/ladamczyk-it/structurelint/compare/v1.0.0...v1.0.1) (2026-08-12)
 
 
