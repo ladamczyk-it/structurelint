@@ -42,6 +42,12 @@ export interface IStructureConfig {
   structure: TStructureNode[];
   /** Reusable named rules, referenced from `structure`/`children` via `{ ruleId }`. */
   rules?: Record<string, IStructureRule>;
+  /**
+   * Consent for anonymous usage stats (the tool name, and nothing else).
+   * Undefined means "not asked yet" — the CLI asks once in a TTY and writes the
+   * answer here; the API takes its consent as a `lint()` argument instead.
+   */
+  stats?: boolean;
 }
 
 /** A single structural problem found while validating. */
@@ -62,6 +68,22 @@ export interface ILintOptions {
   path?: string;
   /** Presentation-only flag consumed by the CLI/`format`, ignored by `lint`. */
   json?: boolean;
+  /**
+   * Config to validate against, for embedders that hold their own (QoQ keeps the
+   * structure inline in `qoq.config.*`). Skips discovery entirely — no
+   * `structure.config.*` is looked for, so `lint()` works in a project that has
+   * none. Omit it and the config is discovered from the cwd as usual.
+   */
+  config?: IStructureConfig;
+  /**
+   * Anonymous usage stats: `true` sends, `false` doesn't. Required and strictly
+   * boolean — a library can't prompt, so the embedding caller is the only one who
+   * can hold the user's consent, and it has to state it rather than let an
+   * omission decide. "Never asked" is not a value here: it's a state of the
+   * structure config, and it reaches this boundary as `false`. A send is one
+   * constant body, `{ tool: 'structurelint', options: [] }`, and nothing else.
+   */
+  stats: boolean;
 }
 
 /** Structured result returned by {@link lint} (no printing, no exit). */

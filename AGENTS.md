@@ -56,7 +56,7 @@ export default config;
 ```js
 import { lint, format } from '@ladamczyk/structurelint';
 
-const result = await lint({ path: 'src' });
+const result = await lint({ path: 'src', stats: false });
 
 result.passed; // boolean — no violations
 result.root; // validated root folder
@@ -65,7 +65,7 @@ result.violations; // Array<{ path, type: 'unexpected' | 'missing', message, exp
 process.stdout.write(format(result)); // text; format(result, true) for JSON
 ```
 
-`lint(options)` accepts the same options as the CLI (`path`). Additional named exports: `validate`, `loadConfig`, `templateToRegex`, `globToRegex`, `isIgnored`, `DEFAULT_PATH`, `DEFAULT_IGNORE`, `DEFAULT_CONFIG_FILES`, and the TypeScript types (`IStructureConfig`, `IStructureRule`, `IRuleRef`, `TStructureNode`, `IViolation`, `ILintOptions`, `ILintResult`).
+`lint(options)` accepts the same options as the CLI (`path`), an optional `config` (a config object to validate against, skipping file discovery — for hosts that hold their own, like QoQ) plus the **required** `stats` boolean — anonymous usage-stats consent, see below. Additional named exports: `validate`, `loadConfig`, `templateToRegex`, `globToRegex`, `isIgnored`, `DEFAULT_PATH`, `DEFAULT_IGNORE`, `DEFAULT_CONFIG_FILES`, and the TypeScript types (`IStructureConfig`, `IStructureRule`, `IRuleRef`, `TStructureNode`, `IViolation`, `ILintOptions`, `ILintResult`).
 
 ## Violation shape
 
@@ -73,3 +73,27 @@ Each violation is `{ path, type, message, expected }`:
 
 - `type: 'unexpected'` — a file/folder matched no rule at its level; `expected` lists the allowed name patterns there.
 - `type: 'missing'` — a `required` rule had no matching entry; `expected` is that rule's name.
+
+## Anonymous usage stats
+
+Opt-in, off until a human says yes. A counted run posts one constant to `https://stats.adamczyk.ovh` and nothing else — every run, every flag combination, byte for byte the same body:
+
+```jsonc
+{ "tool": "structurelint", "options": [] } // `options` is always empty
+```
+
+So the only thing a send carries is that a run happened, and CLI and API runs count under the same name. Never sent: your code, file names, paths, config contents, violations, the flags you typed, project or package names, or anything identifying the user or machine. Sends are fire-and-forget with a 2s timeout; a failure is swallowed and never affects the exit code.
+
+- **CLI** — asks the user, once, the first time it runs with a TTY on both stdin and stdout, and stores the answer as `stats` in the `structure.config.*` it already loads (spliced into your own source, so comments and formatting survive):
+
+  | Config state   | Meaning     | Effect                                        |
+  | -------------- | ----------- | --------------------------------------------- |
+  | `stats: true`  | allowed     | one POST per run                              |
+  | `stats: false` | denied      | nothing sent, never asked again               |
+  | no key         | never asked | nothing sent, asked again on the next TTY run |
+
+  Edit or delete the key to change the answer; deleting it returns to "never asked". Runs that can't ask — `CI=true`, a pipe, `--json`, or a project with no config file to record the answer in — are never prompted, never counted, and write nothing, so they leave the question open rather than answering it for the user.
+
+- **API** — never prompts, never reads the consent from the config, and has no default. `stats: boolean` is a **required** option on `lint()`: the caller holds its own user's consent, so it must pass `true` or `false` outright. `false` sends nothing.
+
+  A host that keeps the structure in its own config — QoQ holds it inline in `qoq.config.*` — passes it as `lint({ config, stats })` rather than reaching past `lint()`: sending stays inside this package, so there is exactly one place consent is checked.

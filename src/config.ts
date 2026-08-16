@@ -12,11 +12,15 @@ export const DEFAULT_CONFIG_FILES = [
   'structure.config.cjs',
 ];
 
-const createExplorer = () =>
-  cosmiconfig(moduleName, {
-    searchStrategy: 'project',
-    searchPlaces: DEFAULT_CONFIG_FILES,
-  });
+// Module-level, not per call: cosmiconfig caches its searches, so the stats
+// consent lookup (which needs the file path) and `loadConfig` share one read.
+const explorer = cosmiconfig(moduleName, {
+  searchStrategy: 'project',
+  searchPlaces: DEFAULT_CONFIG_FILES,
+});
+
+/** Raw cosmiconfig hit — config plus the file path it came from. */
+export const searchConfig = (): ReturnType<typeof explorer.search> => explorer.search();
 
 const assertIsStructureConfig = (config: unknown, source: string): IStructureConfig => {
   if (!config || !Array.isArray((config as Partial<IStructureConfig>).structure)) {
@@ -36,7 +40,7 @@ const assertIsStructureConfig = (config: unknown, source: string): IStructureCon
  * `structure` array.
  */
 export const loadConfig = async (): Promise<IStructureConfig> => {
-  const result = await createExplorer().search();
+  const result = await searchConfig();
   if (!result) {
     throw new Error(
       `No structure config found. Create one of: ${DEFAULT_CONFIG_FILES.join(', ')} in ` +

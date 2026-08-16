@@ -5,9 +5,15 @@ import type { ILintResult } from './types.ts';
 
 const lintMock = vi.fn();
 const formatMock = vi.fn();
+const resolveConsentMock = vi.fn();
+const sendStatsMock = vi.fn();
 
 vi.mock('./lint.ts', () => ({ lint: lintMock }));
 vi.mock('./format.ts', () => ({ format: formatMock }));
+vi.mock('./stats.ts', () => ({
+  resolveConsent: resolveConsentMock,
+  sendStats: sendStatsMock,
+}));
 
 const passingResult: ILintResult = { root: '.', passed: true, violations: [] };
 
@@ -25,6 +31,8 @@ beforeEach(() => {
   vi.resetModules();
   lintMock.mockReset();
   formatMock.mockReset();
+  resolveConsentMock.mockReset().mockResolvedValue(undefined);
+  sendStatsMock.mockReset().mockResolvedValue(undefined);
   exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
   stdoutSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
   stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
@@ -80,6 +88,40 @@ describe('cli', () => {
 
     expect(lintMock).toHaveBeenCalledWith(expect.objectContaining({ path: 'src', json: true }));
     expect(formatMock).toHaveBeenCalledWith(passingResult, true);
+  });
+
+  it('sends one count when consent is granted, and never asks lint to send', async () => {
+    resolveConsentMock.mockResolvedValue(true);
+    lintMock.mockResolvedValue(passingResult);
+    formatMock.mockReturnValue('OK\n');
+
+    await runCli();
+
+    expect(resolveConsentMock).toHaveBeenCalledWith(true);
+    expect(sendStatsMock).toHaveBeenCalledTimes(1);
+    expect(lintMock).toHaveBeenCalledWith(expect.objectContaining({ stats: false }));
+  });
+
+  it.each([
+    ['refused', false],
+    ['unanswered', undefined],
+  ])('sends nothing when consent is %s', async (_state, consent) => {
+    resolveConsentMock.mockResolvedValue(consent);
+    lintMock.mockResolvedValue(passingResult);
+    formatMock.mockReturnValue('OK\n');
+
+    await runCli();
+
+    expect(sendStatsMock).not.toHaveBeenCalled();
+  });
+
+  it('never prompts for stats consent under --json', async () => {
+    lintMock.mockResolvedValue(passingResult);
+    formatMock.mockReturnValue('{}\n');
+
+    await runCli(['--json']);
+
+    expect(resolveConsentMock).toHaveBeenCalledWith(false);
   });
 
   it('prints a colorized error to stderr and exits EXCEPTION when lint throws', async () => {
