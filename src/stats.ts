@@ -7,7 +7,7 @@ import { searchConfig } from './config.ts';
 
 import type { IStructureConfig } from './types.ts';
 
-const STATS_URL = 'https://stats.adamczyk.ovh';
+const STATS_URL = 'https://adamczyk.ovh/stats';
 const STATS_TIMEOUT_MS = 2000;
 
 const askConsent = async (filepath: string): Promise<boolean> => {

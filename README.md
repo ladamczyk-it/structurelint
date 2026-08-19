@@ -119,7 +119,7 @@ Additional named exports: `validate`, `loadConfig`, `templateToRegex`, `globToRe
 
 ## Anonymous usage stats
 
-Opt-in, off until a human says yes. A counted run posts one constant to `https://stats.adamczyk.ovh` and nothing else — every run, every flag combination, byte for byte the same body:
+Opt-in, off until a human says yes. A counted run posts one constant to `https://adamczyk.ovh/stats` and nothing else — every run, every flag combination, byte for byte the same body:
 
 ```jsonc
 { "tool": "structurelint", "options": [] } // `options` is always empty
@@ -140,3 +140,9 @@ So the only thing a send carries is that a run happened, and CLI and API runs co
 - **API** — never prompts, never reads the consent from the config, and has no default. `stats: boolean` is a **required** option on `lint()`: the caller holds its own user's consent, so it must pass `true` or `false` outright. `false` sends nothing.
 
   A host that keeps the structure in its own config — QoQ holds it inline in `qoq.config.*` — passes it as `lint({ config, stats })` rather than reaching past `lint()`: sending stays inside this package, so there is exactly one place consent is checked.
+
+## Last 12 months usage statistics (>=1.1.0)
+
+Regenerated on each release, for daily updated numbers click on chart or visit [https://adamczyk.ovh/docs/structurelint#usage-statistics](https://adamczyk.ovh/docs/structurelint#usage-statistics).
+
+[![Last 12 months usage statistics](https://adamczyk.ovh/img/stats/structurelint.png?date=2026-08-19)](https://adamczyk.ovh/img/stats/structurelint.png)

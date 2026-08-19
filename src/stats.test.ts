@@ -117,7 +117,7 @@ describe('sendStats', () => {
     await sendStats();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://stats.adamczyk.ovh',
+      'https://adamczyk.ovh/stats',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ tool: 'structurelint', options: [] }),

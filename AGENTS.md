@@ -76,7 +76,7 @@ Each violation is `{ path, type, message, expected }`:
 
 ## Anonymous usage stats
 
-Opt-in, off until a human says yes. A counted run posts one constant to `https://stats.adamczyk.ovh` and nothing else — every run, every flag combination, byte for byte the same body:
+Opt-in, off until a human says yes. A counted run posts one constant to `https://adamczyk.ovh/stats` and nothing else — every run, every flag combination, byte for byte the same body:
 
 ```jsonc
 { "tool": "structurelint", "options": [] } // `options` is always empty
