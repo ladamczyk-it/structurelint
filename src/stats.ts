@@ -1,14 +1,12 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { createInterface } from 'readline/promises';
 
+import { sendStats as send, STATS_URL, PIXEL_URL } from '@ladamczyk/qoq-utils';
 import c from 'picocolors';
 
 import { searchConfig } from './config.ts';
 
 import type { IStructureConfig } from './types.ts';
-
-const STATS_URL = 'https://adamczyk.ovh/stats';
-const STATS_TIMEOUT_MS = 2000;
 
 const askConsent = async (filepath: string): Promise<boolean> => {
   process.stdout.write(
@@ -16,6 +14,7 @@ const askConsent = async (filepath: string): Promise<boolean> => {
       c.bold('\nStructurelint usage stats\n'),
       `Send a count of structurelint runs to ${STATS_URL}? Each run posts one thing:\n`,
       `  • the tool name — always the literal ${c.cyan('"structurelint"')}\n`,
+      c.gray(`Blocked POST? The same values go to ${PIXEL_URL} as a GET.\n`),
       c.gray(
         'Never sent: your code, file names, paths, config contents, violations,\n' +
           'the flags you typed, project or package names, and nothing identifying\n' +
@@ -103,21 +102,11 @@ export const resolveConsent = async (ask: boolean = true): Promise<boolean | und
 };
 
 // Package-internal: `lint()` is the only caller, so consent is checked in exactly
-// one place. A dead or slow endpoint must never surface as an error or hold a run
-// up — hence the swallowed catch and the 2s cap.
+// one place. Transport — both endpoints, the shared 2s cap, the swallowed
+// failures — is qoq-utils', so a URL changes in one place for every tool that
+// counts runs; all that is bound here is the name.
 //
-// `options` is always empty and takes no argument: a run count is the whole
-// question this answers, and the sink requires the key. Nothing about how the run
-// was invoked goes out, so there is nothing to sanitize.
-export const sendStats = async (): Promise<void> => {
-  try {
-    await fetch(STATS_URL, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ tool: 'structurelint', options: [] }),
-      signal: AbortSignal.timeout(STATS_TIMEOUT_MS),
-    });
-  } catch {
-    // Stats are best-effort; a failed send is not the user's problem.
-  }
-};
+// No `options` argument, and none passed: a run count is the whole question this
+// answers. Nothing about how the run was invoked goes out, so there is nothing
+// to sanitize.
+export const sendStats = async (): Promise<void> => send('structurelint');

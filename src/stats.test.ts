@@ -110,24 +110,17 @@ describe('writeConsent', () => {
 });
 
 describe('sendStats', () => {
-  it('posts the tool name and an empty options array, and nothing else', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(undefined);
+  // Transport — both endpoints, the shared deadline, the swallowed failures —
+  // is qoq-utils' and tested there. All this binds is the tool name, and that
+  // `options` stays empty.
+  it('sends one constant: the plain structurelint name and nothing else', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
 
     await sendStats();
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://adamczyk.ovh/stats',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ tool: 'structurelint', options: [] }),
-      })
-    );
-  });
-
-  it('swallows a failing endpoint', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
-
-    await expect(sendStats()).resolves.toBeUndefined();
+    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
+      body: JSON.stringify({ tool: 'structurelint', options: [] }),
+    });
   });
 });

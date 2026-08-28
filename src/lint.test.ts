@@ -112,7 +112,9 @@ describe('lint', () => {
     [false, 0],
     [true, 1],
   ])('counts the run under the plain structurelint name when stats is %s', async (stats, calls) => {
-    const fetchMock = vi.fn().mockResolvedValue(undefined);
+    // A real `Response`, not `undefined`: `sendStats` reads `.ok` to decide
+    // whether the pixel fallback is needed, so a bare mock would count twice.
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
     writeConfig('export default { structure: [] };\n');
     mkdirSync(join(root, 'app'));
