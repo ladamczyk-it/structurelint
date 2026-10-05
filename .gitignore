@@ -15,4 +15,4 @@ npm-debug.log*
 .env.local
 .npmrc
 
-.claude/skills
+.claude/*
