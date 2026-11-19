@@ -1,3 +1,10 @@
+## [1.1.6](https://github.com/ladamczyk-it/structurelint/compare/v1.1.5...v1.1.6) (2026-11-19)
+
+
+### Bug Fixes
+
+* packages bump ([cbfdf26](https://github.com/ladamczyk-it/structurelint/commit/cbfdf260b193b6491efe2600e8bce30eb90b0438))
+
 ## [1.1.5](https://github.com/ladamczyk-it/structurelint/compare/v1.1.4...v1.1.5) (2026-10-11)
 
 
