@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import githubStyles from '@internal/docusaurus-theme/github-button.module.css';
+import styles from '@internal/docusaurus-theme/hero.module.css';
 import Layout from '@theme/Layout';
 
 const FEATURES = [
@@ -27,26 +29,37 @@ const Home = (): ReactNode => {
   return (
     <Layout>
       <main>
-        <h1>{siteConfig.title}</h1>
-        <p>{siteConfig.tagline}</p>
-        <pre>
-          <code>npm install --save-dev @ladamczyk/structurelint</code>
-        </pre>
-        <ul>
+        <header className={styles.hero}>
+          <div className={styles.heroContent}>
+            <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
+            <p className={styles.heroTagline}>{siteConfig.tagline}</p>
+            <pre className={styles.heroInstall}>
+              <code>npm install --save-dev @ladamczyk/structurelint</code>
+            </pre>
+            <div className={styles.heroActions}>
+              <Link className="button button--primary button--lg" to="/docs">
+                Read the docs
+              </Link>
+              <a
+                className={githubStyles.githubButton}
+                href="https://github.com/ladamczyk-it/structurelint"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className={githubStyles.githubButtonIcon} aria-hidden="true" />
+                GitHub
+              </a>
+            </div>
+          </div>
+        </header>
+        <ul className={styles.features}>
           {FEATURES.map(({ title, description }) => (
-            <li key={title}>
-              <strong>{title}</strong>: {description}
+            <li key={title} className={styles.feature}>
+              <h2 className={styles.featureTitle}>{title}</h2>
+              <p className={styles.featureDescription}>{description}</p>
             </li>
           ))}
         </ul>
-        <Link to="/docs">Read the docs</Link>{' '}
-        <a
-          href="https://github.com/ladamczyk-it/structurelint"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>
       </main>
     </Layout>
   );
