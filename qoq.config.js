@@ -11,6 +11,7 @@ const rules = {
 
 export default {
   stats: true,
+  learning: true,
   prettier: {
     sources: ['.'],
   },
