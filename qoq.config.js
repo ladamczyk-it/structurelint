@@ -1,4 +1,5 @@
 import { getNoRestrictedImportsPaths } from '@ladamczyk/qoq-eslint-v9-js';
+
 import { websiteEslint } from './qoq.website.js';
 
 const rules = {
@@ -28,6 +29,7 @@ export default {
       'eslint.config.js',
       'qoq.config.js',
       'structure.config.ts',
+      'qoq.website.js',
     ],
     ignoreDependencies: [
       // build specific

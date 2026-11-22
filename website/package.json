@@ -25,5 +25,10 @@
     "@docusaurus/types": "3.10.2",
     "@types/react": "19.3.0",
     "typescript": "6.0.3"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not < 1%",
+    "not op_mini all"
+  ]
 }
