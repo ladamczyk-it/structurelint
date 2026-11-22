@@ -4,7 +4,12 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import githubStyles from '@internal/docusaurus-theme/github-button.module.css';
 import styles from '@internal/docusaurus-theme/hero.module.css';
+import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
+
+import { StructureAnimation } from '../components/StructureAnimation';
+
+import pageStyles from './index.module.css';
 
 const FEATURES = [
   {
@@ -23,36 +28,35 @@ const FEATURES = [
   },
 ];
 
+const OPENER =
+  'Your folder structure is architecture, so stop leaving it to code review. Describe it once as rules, and Structurelint flags every stray file and every missing one, locally, in CI and in whatever your agents write.';
+
 const Home = (): ReactNode => {
   const { siteConfig } = useDocusaurusContext();
 
   return (
     <Layout>
       <main>
-        <header className={styles.hero}>
+        <header className={`${styles.hero} ${pageStyles.hero}`}>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
-            <p className={styles.heroTagline}>{siteConfig.tagline}</p>
-            <pre className={styles.heroInstall}>
-              <code>npm install --save-dev @ladamczyk/structurelint</code>
-            </pre>
-            <div className={styles.heroActions}>
-              <Link className="button button--primary button--lg" to="/docs">
-                Read the docs
-              </Link>
-              <a
-                className={githubStyles.githubButton}
-                href="https://github.com/ladamczyk-it/structurelint"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className={githubStyles.githubButtonIcon} aria-hidden="true" />
-                GitHub
-              </a>
+            <div className={pageStyles.heroTop}>
+              <div className={pageStyles.heroText}>
+                <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
+                <p className={styles.heroTagline}>{OPENER}</p>
+              </div>
+              <div className={styles.heroActions}>
+                <Link className={githubStyles.githubButton} to="/docs">
+                  Get Started
+                </Link>
+              </div>
+            </div>
+            <div className={`${styles.heroInstall} ${pageStyles.install}`}>
+              <CodeBlock language="bash">npm install --save-dev @ladamczyk/structurelint</CodeBlock>
             </div>
           </div>
         </header>
-        <ul className={styles.features}>
+        <StructureAnimation />
+        <ul className={`${styles.features} ${pageStyles.features}`}>
           {FEATURES.map(({ title, description }) => (
             <li key={title} className={styles.feature}>
               <h2 className={styles.featureTitle}>{title}</h2>

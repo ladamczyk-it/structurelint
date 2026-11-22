@@ -1,0 +1,380 @@
+/*
+ * One 12s loop: rows appear → scan checks each against its rule → violations
+ * print → stray file removed, missing file added → pass. Base styles are the
+ * final "fixed" frame, so reduced motion just switches animations off.
+ */
+
+.wrapper {
+  --loop: 12s;
+  --h: 1.9em;
+  --ok: oklch(0.75 0.16 150);
+  --bad: oklch(0.7 0.19 20);
+  --muted: oklch(0.6 0.015 var(--cv-hue));
+
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 6vw 3rem;
+  box-sizing: content-box;
+}
+
+.panel {
+  overflow: hidden;
+  border: 1.5px solid var(--cv-color-hex-frame);
+  border-radius: 0.75rem;
+  background: var(--cv-color-charcoal);
+  color: var(--cv-color-near-white);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: clamp(0.72rem, 2.6vw, 0.92rem);
+  box-shadow: 0 20px 50px -20px oklch(0.46 0.19 var(--cv-hue) / 0.45);
+}
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid oklch(1 0 0 / 8%);
+}
+
+.dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: oklch(1 0 0 / 18%);
+}
+
+.titleText {
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+/* ── Tree ──────────────────────────────────────────────────────────────── */
+
+.tree {
+  position: relative;
+  min-height: calc(var(--h) * 9);
+  padding: 0.75rem 0.9rem;
+}
+
+.root,
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: var(--h);
+}
+
+.root {
+  color: var(--muted);
+}
+
+.row {
+  max-height: var(--h);
+  padding-left: calc(var(--depth) * 1.25em);
+  border: 1px solid transparent;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  animation: rowIn var(--loop) calc(var(--i) * 0.12s) infinite both;
+}
+
+.name {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.rule {
+  padding: 0.05rem 0.45rem;
+  border-radius: 0.25rem;
+  background: oklch(0.46 0.19 var(--cv-hue) / 25%);
+  color: oklch(0.8 0.08 var(--cv-hue));
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.markOk,
+.markBad,
+.missOk,
+.missBad {
+  min-width: 1.2em;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.markOk,
+.missOk {
+  color: var(--ok);
+}
+
+.markBad,
+.missBad {
+  color: var(--bad);
+}
+
+.markOk,
+.markBad {
+  animation: markIn var(--loop) calc(var(--i) * 0.3s) infinite both;
+}
+
+.scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(0.75rem + var(--h));
+  height: 2px;
+  opacity: 0;
+  background: oklch(0.75 0.15 var(--cv-hue));
+  box-shadow: 0 0 12px 2px oklch(0.75 0.15 var(--cv-hue) / 60%);
+  animation: scan var(--loop) infinite both;
+}
+
+/* Stray file: flagged red, then deleted. Final frame: gone. */
+.stray {
+  max-height: 0;
+  opacity: 0;
+  animation-name: strayRow;
+}
+
+/* Required file: absent until the scan ends, shown dashed, then created. */
+.missing {
+  animation: missingRow var(--loop) infinite both;
+}
+
+.missMark {
+  display: grid;
+  justify-items: end;
+}
+
+.missBad,
+.missOk {
+  grid-area: 1 / 1;
+}
+
+.missBad {
+  opacity: 0;
+  animation: missBad var(--loop) infinite both;
+}
+
+.missOk {
+  animation: missOk var(--loop) infinite both;
+}
+
+/* ── Terminal ──────────────────────────────────────────────────────────── */
+
+.terminal {
+  padding: 0.75rem 0.9rem 1rem;
+  border-top: 1px solid oklch(1 0 0 / 8%);
+  background: var(--cv-color-charcoal-deep);
+}
+
+.prompt {
+  color: var(--muted);
+}
+
+.output {
+  display: grid;
+  min-height: calc(var(--h) * 3);
+  margin-top: 0.4rem;
+}
+
+.fail,
+.pass {
+  grid-area: 1 / 1;
+  line-height: 1.6;
+}
+
+.fail {
+  opacity: 0;
+  color: var(--bad);
+  animation: fail var(--loop) infinite both;
+}
+
+.pass {
+  color: var(--ok);
+  animation: pass var(--loop) infinite both;
+}
+
+/* ── Keyframes (percentages of --loop) ─────────────────────────────────── */
+
+@keyframes rowIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  5%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  97%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes markIn {
+  0%,
+  26% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  28%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  97%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes scan {
+  0%,
+  25% {
+    opacity: 0;
+    top: calc(0.75rem + var(--h));
+  }
+  26% {
+    opacity: 1;
+  }
+  44% {
+    opacity: 1;
+    top: calc(0.75rem + var(--h) * 8);
+  }
+  46%,
+  100% {
+    opacity: 0;
+    top: calc(0.75rem + var(--h) * 8);
+  }
+}
+
+@keyframes strayRow {
+  0% {
+    opacity: 0;
+    max-height: var(--h);
+    transform: translateY(6px);
+  }
+  5%,
+  32% {
+    opacity: 1;
+    max-height: var(--h);
+    transform: none;
+    background: transparent;
+  }
+  34%,
+  62% {
+    opacity: 1;
+    max-height: var(--h);
+    transform: none;
+    background: oklch(0.7 0.19 20 / 16%);
+  }
+  66% {
+    opacity: 0;
+    max-height: var(--h);
+    transform: translateX(30%);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateX(30%);
+  }
+}
+
+@keyframes missingRow {
+  0%,
+  46% {
+    opacity: 0;
+    max-height: 0;
+    border: 1px dashed var(--bad);
+  }
+  49%,
+  65% {
+    opacity: 1;
+    max-height: var(--h);
+    border: 1px dashed var(--bad);
+    color: var(--bad);
+  }
+  68%,
+  92% {
+    opacity: 1;
+    max-height: var(--h);
+    border: 1px solid transparent;
+    color: inherit;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    max-height: var(--h);
+  }
+}
+
+@keyframes missBad {
+  0%,
+  66% {
+    opacity: 1;
+  }
+  67%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes missOk {
+  0%,
+  66% {
+    opacity: 0;
+  }
+  67%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fail {
+  0%,
+  48% {
+    opacity: 0;
+  }
+  50%,
+  62% {
+    opacity: 1;
+  }
+  64%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pass {
+  0%,
+  69% {
+    opacity: 0;
+  }
+  71%,
+  92% {
+    opacity: 1;
+  }
+  97%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media screen and (max-width: 996px) {
+  .wrapper {
+    padding: 0 1.5rem 2rem;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .rule {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper * {
+    animation: none !important;
+  }
+}
