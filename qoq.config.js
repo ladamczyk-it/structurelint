@@ -19,6 +19,7 @@ export default {
   knip: {
     workspaces: {
       '.': { entry: ['./src/index.{js,ts}', './src/cli.{js,ts}'], project: './src/**/*.{js,ts}' },
+      // Knip's Docusaurus plugin rewrites the Theme's scoped name to a package that does not exist
       website: { ignoreDependencies: ['@internal/docusaurus-theme-docusaurus-theme'] },
     },
     ignore: [
