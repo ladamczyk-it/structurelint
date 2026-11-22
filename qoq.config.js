@@ -1,4 +1,5 @@
 import { getNoRestrictedImportsPaths } from '@ladamczyk/qoq-eslint-v9-js';
+import { websiteEslint } from './qoq.website.js';
 
 const rules = {
   'no-restricted-imports': [
@@ -16,8 +17,10 @@ export default {
     sources: ['.'],
   },
   knip: {
-    entry: ['./src/index.{js,ts}', './src/cli.{js,ts}'],
-    project: './src/**/*.{js,ts}',
+    workspaces: {
+      '.': { entry: ['./src/index.{js,ts}', './src/cli.{js,ts}'], project: './src/**/*.{js,ts}' },
+      website: { ignoreDependencies: ['@internal/docusaurus-theme-docusaurus-theme'] },
+    },
     ignore: [
       '**/rolldown.config.js',
       '**/vitest.config.js',
@@ -39,5 +42,6 @@ export default {
       files: ['src/**/*.ts'],
       rules,
     },
+    ...websiteEslint,
   ],
 };
