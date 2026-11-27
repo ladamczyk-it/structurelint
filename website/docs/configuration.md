@@ -1,10 +1,13 @@
 ---
-title: Configuration
+title: 'Configuration file: structure.config.ts'
+sidebar_label: 'Configuration'
 sidebar_position: 3
-description: The structure.config file, how it is found, and its top-level keys.
+description: 'Where structure.config.ts lives and how it is found, its top-level keys structure, structureRoot, ignorePatterns and rules, and what is always ignored.'
+keywords:
+  [structure.config.ts, folder structure config, ignorePatterns, structureRoot, typescript config]
 ---
 
-Create a `structure.config.ts` (or `.js`, `.mjs`, `.cjs`) at your project root that default-exports a config. It is auto-discovered in the current working directory — there is no way to point at a different path. `.ts` configs are loaded directly, no build step needed: they are transpiled with your project's `typescript` package (types are stripped, not checked). `.mts` and `.cts` are not supported.
+Create a `structure.config.ts` (or `.js`, `.mjs`, `.cjs`) at your project root that default-exports a config. It is discovered from the current working directory up to the nearest folder with a `package.json` — there is no way to point at a different path. `.ts` configs are loaded directly, no build step needed: they are transpiled with your project's `typescript` package (types are stripped, not checked). `.mts` and `.cts` are not supported.
 
 ```ts
 import type { IStructureConfig } from '@ladamczyk/structurelint';

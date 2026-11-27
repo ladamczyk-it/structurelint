@@ -1,10 +1,12 @@
 ---
-title: JavaScript API
+title: 'JavaScript API: lint(), validate() and format()'
+sidebar_label: 'JavaScript API'
 sidebar_position: 6
-description: lint(), format() and the other exports of the ESM/CJS API.
+description: 'Run the structure check from Node: lint() options and result, validate() against an inline config, format() for text or JSON, and the matcher helpers.'
+keywords: [structurelint api, folder structure node, lint api, typescript, validate]
 ---
 
-The package also exports an ESM/CJS API. `lint` runs the same validation as the CLI and returns structured results without printing or exiting:
+The package also exports an ESM-only JavaScript API, with TypeScript declarations. `lint` runs the same validation as the CLI and returns structured results without printing or exiting:
 
 ```js
 import { lint, format } from '@ladamczyk/structurelint';

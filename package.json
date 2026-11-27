@@ -1,15 +1,21 @@
 {
   "name": "@ladamczyk/structurelint",
   "version": "1.1.6",
-  "description": "Standalone CLI and JavaScript API for project file/folder structure validation",
+  "description": "Lint your project's file and folder structure against rules you define: flag stray and missing files locally, in CI and in code AI agents write. CLI and JavaScript API.",
   "keywords": [
     "cli",
     "structurelint",
     "project structure",
     "folder structure",
     "file structure",
-    "validation",
-    "lint"
+    "directory structure",
+    "linter",
+    "naming convention",
+    "architecture",
+    "ci",
+    "ai-agents",
+    "quality-gate",
+    "qoq"
   ],
   "homepage": "https://github.com/ladamczyk-it/structurelint",
   "bugs": {

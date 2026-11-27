@@ -1,23 +1,30 @@
 import type { ReactNode } from 'react';
 
+import Head from '@docusaurus/Head';
 import { HomePage } from '@internal/docusaurus-theme/HomePage';
 
 import { StructureAnimation } from '../components/StructureAnimation';
 
+const TITLE = 'Structurelint: lint your project file and folder structure';
+
+const DESCRIPTION =
+  'Describe your project layout once as rules and flag every stray and missing file, locally, in CI and in code AI agents write. A CLI and a JavaScript API.';
+
 const FEATURES = [
   {
     title: 'Recursive rules',
-    description: 'A rule can reference itself or other named rules to describe nested structures.',
+    description:
+      'Name templates such as {PascalCase}, required entries, and rules that reference themselves or other named rules to describe nested structures.',
   },
   {
-    title: 'Runs in parallel',
+    title: 'Built for CI and AI agents',
     description:
-      'Extracted from an ESLint rule so structure checks run beside your other tooling, not inside the ESLint pipeline.',
+      'Exit code 1 on any violation, --json with the names that were expected, and an optional blocking check inside qoq.',
   },
   {
-    title: 'Framework-agnostic',
+    title: 'Outside ESLint',
     description:
-      'Rules describe any JS/TS layout and inspect only what is on disk, with no scaffolding or codegen.',
+      'Extracted from an ESLint rule so it runs in parallel with the rest of your tooling, on any JS/TS layout, with no scaffolding or codegen.',
   },
 ];
 
@@ -30,6 +37,12 @@ const Home = (): ReactNode => (
     install="npm install --save-dev @ladamczyk/structurelint"
     opener={OPENER}
   >
+    <Head>
+      <title>{TITLE}</title>
+      <meta content={DESCRIPTION} name="description" />
+      <meta content={TITLE} property="og:title" />
+      <meta content={DESCRIPTION} property="og:description" />
+    </Head>
     <StructureAnimation />
   </HomePage>
 );

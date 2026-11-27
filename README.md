@@ -1,6 +1,8 @@
 # @ladamczyk/structurelint
 
-Browse our docs [https://adamczyk.ovh/docs/structurelint](https://adamczyk.ovh/docs/structurelint).
+Lint your project's file and folder structure against rules you define: every stray file and every missing one is flagged, locally, in CI and in code AI agents write. A CLI and a JavaScript API, and an optional check inside [qoq](https://qoq.adamczyk.ovh/).
+
+Docs: [structurelint.adamczyk.ovh](https://structurelint.adamczyk.ovh/)
 
 ## Rationale
 
@@ -24,7 +26,7 @@ npx @ladamczyk/structurelint
 
 ## Usage
 
-Create a `structure.config.ts` (or `.js`/`.mjs`) at your project root that default-exports a config, then run `structurelint`:
+Create a `structure.config.ts` (or `.js`, `.mjs`, `.cjs`) at your project root that default-exports a config, then run `structurelint`:
 
 ```bash
 structurelint              # validate, pretty output
@@ -95,7 +97,7 @@ With the config above, `components/Button/nested/Icon/Icon.tsx` is valid, while 
 
 ## JavaScript API
 
-The package also exports an ESM/CJS API. `lint` runs the same validation and returns structured results without printing or exiting:
+The package also exports an ESM-only JavaScript API, with TypeScript declarations. `lint` runs the same validation and returns structured results without printing or exiting:
 
 ```js
 import { lint, format } from '@ladamczyk/structurelint';
@@ -117,6 +119,14 @@ const result = await lint({ config: { structureRoot: 'src', structure }, stats: 
 
 Additional named exports: `validate`, `loadConfig`, `templateToRegex`, `globToRegex`, `isIgnored`, `DEFAULT_PATH`, `DEFAULT_IGNORE`, `DEFAULT_CONFIG_FILES`, and the TypeScript types (`IStructureConfig`, `IStructureRule`, `IRuleRef`, `TStructureNode`, `IViolation`, `ILintOptions`, `ILintResult`).
 
+## AI agents and CI
+
+AI coding agents create files wherever the task is easiest; a structure check makes the layout a rule they hit at once. Exit code `1` means violations, `2` a usage error, and `--json` prints `{ passed, root, violations[] }`, where each violation carries `path`, `type` (`unexpected` or `missing`), `message` and `expected`, the names that would have been allowed. Runs with `--json`, `CI=true` or no terminal are never prompted. An `AGENTS.md` snippet is in [AI agents and CI](https://structurelint.adamczyk.ovh/docs/ai-agents-and-ci).
+
+## qoq
+
+[qoq](https://qoq.adamczyk.ovh/) runs Structurelint in-process when `qoq.config.js` has a `structurelint` block (the same keys as `structure.config.ts`); it is off without one. Violations fail `qoq --check`. qoq passes its own block, so `structure.config.*` is not read there, and the whole tree is checked even on staged runs. `--skip-structurelint` skips it for one run. More in [qoq integration](https://structurelint.adamczyk.ovh/docs/qoq).
+
 ## Anonymous usage stats
 
 Opt-in, off until a human says yes. A counted run posts one constant to `https://stats.adamczyk.ovh` and nothing else — every run, every flag combination, byte for byte the same body:
@@ -137,7 +147,7 @@ So the only thing a send carries is that a run happened, and CLI and API runs co
   | `stats: false` | denied      | nothing sent, never asked again               |
   | no key         | never asked | nothing sent, asked again on the next TTY run |
 
-  Edit or delete the key to change the answer; deleting it returns to "never asked". Runs that can't ask — `CI=true`, a pipe, `--json`, or a project with no config file to record the answer in — are never prompted, never counted, and write nothing, so they leave the question open rather than answering it for the user.
+  Edit or delete the key to change the answer; deleting it returns to "never asked". Runs that can't ask — `CI=true`, a pipe, `--json`, or a project with no config file to record the answer in — are never prompted and write nothing, so they leave the question open rather than answering it for the user. While no answer is stored they are never counted; once `stats: true` is stored, CI and `--json` runs that read that config are counted too.
 
 - **API** — never prompts, never reads the consent from the config, and has no default. `stats: boolean` is a **required** option on `lint()`: the caller holds its own user's consent, so it must pass `true` or `false` outright. `false` sends nothing.
 

@@ -1,7 +1,9 @@
 ---
-title: Rules
+title: 'Folder and file rules, name templates and recursion'
+sidebar_label: 'Rules'
 sidebar_position: 4
-description: File and folder rules, name templates, and reusable and recursive rules.
+description: 'How to describe a project layout: file and folder rules, required entries, {PascalCase} and other name templates, reusable rules and recursive structures.'
+keywords: [folder structure rules, file naming convention, PascalCase, kebab-case, recursive rules]
 ---
 
 `structure` lists what may appear directly inside the root folder; each folder rule's `children` lists what may appear inside the folders it matches. Every entry on disk must match a rule at its level, or it is reported as [unexpected](./violations.md).
