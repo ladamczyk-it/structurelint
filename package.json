@@ -17,7 +17,7 @@
     "quality-gate",
     "qoq"
   ],
-  "homepage": "https://structurelint.adamczyk.ovh/",
+  "homepage": "https://structurelint.adamczyk.ovh",
   "bugs": {
     "url": "https://github.com/ladamczyk-it/structurelint/issues"
   },
