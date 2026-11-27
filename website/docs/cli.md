@@ -1,7 +1,9 @@
 ---
-title: Command line
+title: 'CLI options, exit codes and JSON output'
+sidebar_label: 'Command line'
 sidebar_position: 2
-description: The structurelint command, its options and exit codes.
+description: 'Every command-line option, what exit codes 0, 1 and 2 mean, the --json output for CI and AI agents, and how to run the structure check in scripts.'
+keywords: [structurelint cli, folder structure lint, exit codes, json output, ci]
 ---
 
 ```bash

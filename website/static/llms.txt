@@ -1,0 +1,52 @@
+# Structurelint
+
+> Structurelint (@ladamczyk/structurelint) is a CLI and JavaScript API that validates an existing project's file and folder structure against rules you define. It flags every file or folder no rule allows and every required one that is missing, locally, in CI and in code AI coding agents write. It does not need ESLint and never scaffolds or generates code. It is an optional blocking check inside qoq.
+
+Install and run: `npm install --save-dev @ladamczyk/structurelint` then `npx structurelint`, or `npx @ladamczyk/structurelint`. Needs Node ^22.22.2, ^24.15.0 or >=26 and npm 10+. `.ts` configs are transpiled with the project's own `typescript` package.
+
+Config: `structure.config.ts` (or .js, .mjs, .cjs), discovered from the current working directory up to the nearest folder with a package.json, default-exporting `{ structure, structureRoot?, ignorePatterns?, rules?, stats? }`. There is no --config flag. `node_modules` and `.git` are always ignored.
+
+Example:
+```ts
+import type { IStructureConfig } from '@ladamczyk/structurelint';
+
+export default {
+  structureRoot: 'src',
+  structure: [
+    { name: 'index.ts', required: true },
+    { name: 'components', children: [{ name: '{PascalCase}.tsx' }] },
+  ],
+} satisfies IStructureConfig;
+```
+
+Rules: `structure` lists what may appear directly in the root; a rule with `children` is a folder rule, otherwise a file rule; `required: true` reports it as missing when nothing matches; `{ ruleId }` references a named rule in `rules`, resolved lazily so rules can be recursive; `folderRecursionLimit` caps how deep a self-referencing rule keeps validating. Name templates: `{PascalCase}`, `{camelCase}`, `{kebab-case}`, `{snake_case}`, `{SCREAMING_SNAKE_CASE}`, `{anyCase}`, `(a|b)` alternatives and `*`. Ignore globs support `*`, `**` and `?`. The first matching rule wins. It reads the file system directly, not git.
+
+CLI: `structurelint [-p, --path <dir>] [--json] [-h]`. `--path` overrides `structureRoot`. Exit codes: 0 valid; 1 violations; 2 usage error (no config, root folder missing, invalid config such as an unknown ruleId or template token).
+
+JSON (`--json`): `{ passed, root, violations: [{ path, type, message, expected }] }`; `type` is `unexpected` (an entry no rule allows; `expected` lists the allowed names) or `missing` (a required rule with no match; `path` is the parent folder). On a usage error: `{ passed: false, error }`. No schema version field. Runs with --json, CI=true or no terminal never prompt.
+
+JavaScript API (ESM only, TypeScript types included): `lint({ path?, config?, stats })` resolves to the same object `--json` prints; `stats` is a required boolean and the API never prompts; `config` skips config discovery. `format(result, json?)` renders text or JSON. Also `validate`, `loadConfig`, `templateToRegex`, `globToRegex`, `isIgnored`, `DEFAULT_PATH`, `DEFAULT_IGNORE`, `DEFAULT_CONFIG_FILES` and the types IStructureConfig, IStructureRule, IRuleRef, TStructureNode, IViolation, ILintOptions, ILintResult.
+
+qoq: enable with a `structurelint` block in qoq.config.js holding the same keys as structure.config.ts (off without one). Violations fail `qoq --check`; qoq's block replaces structure.config, the whole tree is checked even on staged runs, `--skip-structurelint` skips it, and `--json` writes structurelint-report.json, which the /qoq fix skill reads (violations are not auto-fixable).
+
+Compared with ls-lint (file and directory names only, YAML config) and eslint-plugin-project-structure (folder structure, imports and file composition inside ESLint): structurelint validates which entries may exist at each level, with required entries and recursive rules, outside ESLint.
+
+Usage statistics: opt-in; the answer is stored as `stats` in structure.config. With `stats: true` stored, every CLI run counts, CI included; only the tool name is sent.
+
+## Docs
+
+- [Lint your file and folder structure](https://structurelint.adamczyk.ovh/docs/): what it does, install, comparison with ls-lint and eslint-plugin-project-structure
+- [CLI options, exit codes and JSON output](https://structurelint.adamczyk.ovh/docs/cli): options, exit codes, --json and use in scripts
+- [Configuration file](https://structurelint.adamczyk.ovh/docs/configuration): structure.config.ts, discovery and top-level keys
+- [Folder and file rules, name templates and recursion](https://structurelint.adamczyk.ovh/docs/rules): describing a layout
+- [Violations](https://structurelint.adamczyk.ovh/docs/violations): unexpected and missing entries, as text and JSON
+- [JavaScript API](https://structurelint.adamczyk.ovh/docs/javascript-api): lint(), validate(), format() and helpers
+- [Folder structure gate for AI agents and CI](https://structurelint.adamczyk.ovh/docs/ai-agents-and-ci): contract, CI example and an AGENTS.md snippet
+- [qoq integration](https://structurelint.adamczyk.ovh/docs/qoq): enabling it in qoq --check and how /qoq fix reports it
+
+## Optional
+
+- [Usage statistics](https://structurelint.adamczyk.ovh/docs/usage-statistics): the opt-in prompt and exactly what is sent
+- [GitHub repository](https://github.com/ladamczyk-it/structurelint): source, issues and CHANGELOG.md
+- [npm package](https://www.npmjs.com/package/@ladamczyk/structurelint): @ladamczyk/structurelint
+- [qoq](https://qoq.adamczyk.ovh/): the JavaScript/TypeScript quality suite that can run structurelint

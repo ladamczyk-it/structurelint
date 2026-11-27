@@ -1,7 +1,18 @@
 ---
-title: Introduction
+title: 'Lint your file and folder structure'
+sidebar_label: 'Introduction'
 sidebar_position: 1
-description: "Standalone linter that validates an existing project's file and folder structure against recursive rules you define — no scaffolding, no codegen."
+description: 'Validate a project file and folder structure against rules you define: flag stray and missing files in CI and in code AI agents write. CLI and JS API.'
+keywords:
+  [
+    folder structure linter,
+    file structure lint,
+    project structure,
+    directory structure,
+    naming convention,
+    ls-lint alternative,
+    ai coding agents,
+  ]
 ---
 
 import styles from '@internal/docusaurus-theme/github-button.module.css';
@@ -18,18 +29,34 @@ import styles from '@internal/docusaurus-theme/github-button.module.css';
 
 # Structurelint
 
-A standalone linter that validates an existing project's file/folder structure against rules you define — no scaffolding, no code generation. It only inspects what is already on disk and reports anything that does not match.
-
-It was extracted from an ESLint structure rule so structure validation can run **in parallel** with the rest of your tooling instead of being sequenced inside the ESLint pipeline. It is not tied to React (or any framework) — the rules describe whatever layout your JS/TS project uses.
+Structurelint checks an existing project's files and folders against rules you define, and reports every entry no rule allows and every required one that is missing. It is a CLI and a JavaScript API, it does not need ESLint, and it never scaffolds or generates code: it only reads what is on disk.
 
 > Content is verified against **`@ladamczyk/structurelint` v1.1.6**. See [`CHANGELOG.md`](https://github.com/ladamczyk-it/structurelint/blob/main/CHANGELOG.md) to verify accuracy.
 
-Rules are **recursive** — a rule can reference itself or other named rules to describe nested structures (e.g. `components/Button/nested/Icon`, where `nested` reuses the same PascalCase component rules as the root `components`).
+## Why
+
+Folder structure is architecture, and code review is a poor place to enforce it. AI coding agents make it harder still: they create files wherever the task is easiest. Describe the layout once as rules, and every run, local, in CI or after an agent's change, fails on a stray `utils2.ts` or a component without its `index.ts`.
+
+```ts
+// structure.config.ts
+import type { IStructureConfig } from '@ladamczyk/structurelint';
+
+export default {
+  structureRoot: 'src',
+  structure: [
+    { name: 'index.ts', required: true },
+    { name: 'components', children: [{ name: '{PascalCase}.tsx' }] },
+  ],
+} satisfies IStructureConfig;
+```
+
+Rules are **recursive**: a rule can reference itself or other named rules to describe nested structures, such as `components/Button/nested/Icon`, where `nested` reuses the same PascalCase component rules as the root `components`. See [Rules](./rules.md).
 
 ## Installation
 
 ```bash
 npm install --save-dev @ladamczyk/structurelint
+npx structurelint
 ```
 
 Or run it directly without installing:
@@ -38,11 +65,26 @@ Or run it directly without installing:
 npx @ladamczyk/structurelint
 ```
 
-List all available options:
+It needs Node `^22.22.2`, `^24.15.0` or `>=26` and npm 10 or later. `.ts` configs also need `typescript` in your project.
 
-```bash
-npx @ladamczyk/structurelint -h
-```
+## Compared with similar tools
+
+|                              | structurelint                                    | ls-lint                                  | eslint-plugin-project-structure                          |
+| ---------------------------- | ------------------------------------------------ | ---------------------------------------- | -------------------------------------------------------- |
+| What it validates            | which files and folders may exist at each level  | file and directory names                 | folder structure, imports between modules, file contents |
+| Required files and folders   | yes, `required: true`                            | counts per directory with `exists:N`     | yes, when a related file exists                          |
+| Reusable and recursive rules | yes, with a recursion limit                      | glob keys and parent-folder substitution | yes, with a depth limit                                  |
+| Needs ESLint                 | no                                               | no                                       | yes                                                      |
+| Config                       | `structure.config.ts` (or `.js`, `.mjs`, `.cjs`) | `.ls-lint.yml`                           | ESLint config                                            |
+
+ls-lint is the pick when only names matter; eslint-plugin-project-structure when the structure check should live inside ESLint alongside import rules. Structurelint was extracted from an ESLint structure rule so the check runs **in parallel** with the rest of your tooling, outside the ESLint pipeline.
+
+## Next steps
+
+- [Configuration](./configuration.md) and [Rules](./rules.md): describe your layout.
+- [Command line](./cli.md): exit codes and `--json`.
+- [AI agents and CI](./ai-agents-and-ci.md): use it as a gate, with an `AGENTS.md` snippet.
+- [qoq integration](./qoq.md): run it inside `qoq --check`.
 
 ## Changelog
 

@@ -94,7 +94,7 @@ So the only thing a send carries is that a run happened, and CLI and API runs co
   | `stats: false` | denied      | nothing sent, never asked again               |
   | no key         | never asked | nothing sent, asked again on the next TTY run |
 
-  Edit or delete the key to change the answer; deleting it returns to "never asked". Runs that can't ask — `CI=true`, a pipe, `--json`, or a project with no config file to record the answer in — are never prompted, never counted, and write nothing, so they leave the question open rather than answering it for the user.
+  Edit or delete the key to change the answer; deleting it returns to "never asked". Runs that can't ask — `CI=true`, a pipe, `--json`, or a project with no config file to record the answer in — are never prompted and write nothing, so they leave the question open rather than answering it for the user. While no answer is stored they are never counted; once `stats: true` is stored, CI and `--json` runs that read that config are counted too.
 
 - **API** — never prompts, never reads the consent from the config, and has no default. `stats: boolean` is a **required** option on `lint()`: the caller holds its own user's consent, so it must pass `true` or `false` outright. `false` sends nothing.
 

@@ -1,8 +1,12 @@
 ---
-title: Violations
+title: 'Violations: unexpected and missing files'
+sidebar_label: 'Violations'
 sidebar_position: 5
-description: What structurelint reports, in text and as JSON.
+description: 'What a structure check reports: unexpected and missing files and folders, the expected names, and the same results as text or as JSON for CI and agents.'
+keywords: [unexpected file, missing file, folder structure violations, json output, lint result]
 ---
+
+A check reports two kinds of problem: an entry on disk that no rule allows (`unexpected`), and a `required` rule nothing on disk matches (`missing`).
 
 Each violation is `{ path, type, message, expected }`:
 
