@@ -1,0 +1,49 @@
+---
+title: Introduction
+sidebar_position: 1
+description: "Standalone linter that validates an existing project's file and folder structure against recursive rules you define — no scaffolding, no codegen."
+---
+
+import styles from '@internal/docusaurus-theme/github-button.module.css';
+
+<a
+  href="https://github.com/ladamczyk-it/structurelint"
+  target="_blank"
+  rel="noopener noreferrer"
+  className={styles.githubButton}
+>
+  <span aria-hidden="true" className={styles.githubButtonIcon} />
+  <span>GitHub</span>
+</a>
+
+# Structurelint
+
+A standalone linter that validates an existing project's file/folder structure against rules you define — no scaffolding, no code generation. It only inspects what is already on disk and reports anything that does not match.
+
+It was extracted from an ESLint structure rule so structure validation can run **in parallel** with the rest of your tooling instead of being sequenced inside the ESLint pipeline. It is not tied to React (or any framework) — the rules describe whatever layout your JS/TS project uses.
+
+> Content is verified against **`@ladamczyk/structurelint` v1.1.6**. See [`CHANGELOG.md`](https://github.com/ladamczyk-it/structurelint/blob/main/CHANGELOG.md) to verify accuracy.
+
+Rules are **recursive** — a rule can reference itself or other named rules to describe nested structures (e.g. `components/Button/nested/Icon`, where `nested` reuses the same PascalCase component rules as the root `components`).
+
+## Installation
+
+```bash
+npm install --save-dev @ladamczyk/structurelint
+```
+
+Or run it directly without installing:
+
+```bash
+npx @ladamczyk/structurelint
+```
+
+List all available options:
+
+```bash
+npx @ladamczyk/structurelint -h
+```
+
+## Changelog
+
+Release history lives in the repo — [Releases](https://github.com/ladamczyk-it/structurelint/releases) and [`CHANGELOG.md`](https://github.com/ladamczyk-it/structurelint/blob/main/CHANGELOG.md).

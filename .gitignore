@@ -16,3 +16,5 @@ npm-debug.log*
 .npmrc
 
 .claude/*
+plans/*
+!website/.npmrc

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A folder tree whose last branch is a check: the structure matches its rules. -->
+  <g fill="none" stroke="#12b8cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 21v29h10M15 30h10" opacity=".65" />
+    <path d="M31 50l6 6 18-18" stroke="#2fd08a" stroke-width="6.5" />
+  </g>
+  <rect x="5" y="4" width="20" height="17" rx="4" fill="#12b8cc" />
+  <rect x="29" y="24" width="29" height="12" rx="4" fill="#12b8cc" />
+</svg>
