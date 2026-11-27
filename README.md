@@ -155,6 +155,6 @@ So the only thing a send carries is that a run happened, and CLI and API runs co
 
 ## Last 12 months usage statistics (>=1.1.0)
 
-Regenerated on each release, for daily updated numbers click on chart or visit [https://adamczyk.ovh/docs/structurelint#usage-statistics](https://adamczyk.ovh/docs/structurelint#usage-statistics).
+Regenerated on each release, for daily updated numbers click on chart or visit [structurelint.adamczyk.ovh/docs/usage-statistics](https://structurelint.adamczyk.ovh/docs/usage-statistics).
 
 [![Last 12 months usage statistics](https://adamczyk.ovh/img/stats/structurelint.png?date=2026-08-19)](https://adamczyk.ovh/img/stats/structurelint.png)
