@@ -19,7 +19,7 @@ export default {
 } satisfies IStructureConfig;
 ```
 
-Rules: `structure` lists what may appear directly in the root; a rule with `children` is a folder rule, otherwise a file rule; `required: true` reports it as missing when nothing matches; `{ ruleId }` references a named rule in `rules`, resolved lazily so rules can be recursive; `folderRecursionLimit` caps how deep a self-referencing rule keeps validating. Name templates: `{PascalCase}`, `{camelCase}`, `{kebab-case}`, `{snake_case}`, `{SCREAMING_SNAKE_CASE}`, `{anyCase}`, `(a|b)` alternatives and `*`. Ignore globs support `*`, `**` and `?`. The first matching rule wins. It reads the file system directly, not git.
+Rules: `structure` lists what may appear directly in the root; a rule with `children` is a folder rule, otherwise a file rule; `required: true` reports it as missing when nothing matches; `{ ruleId }` references a named rule in `rules`, resolved lazily so rules can be recursive; `folderRecursionLimit` caps how deep a self-referencing rule keeps validating. Name templates: `{PascalCase}`, `{camelCase}`, `{kebab-case}`, `{snake_case}`, `{SCREAMING_SNAKE_CASE}`, `{anyCase}`, `(a|b)` alternatives and `*`. Ignore globs support `*`, `**` and `?`. `[` and `]` are literal; `(` always opens alternatives, so a literal `(group)` folder is matched with `*)`. The first matching rule wins. It reads the file system directly, not git.
 
 CLI: `structurelint [-p, --path <dir>] [--json] [-h]`. `--path` overrides `structureRoot`. Exit codes: 0 valid; 1 violations; 2 usage error (no config, root folder missing, invalid config such as an unknown ruleId or template token).
 
@@ -35,10 +35,12 @@ Usage statistics: opt-in; the answer is stored as `stats` in structure.config. W
 
 ## Docs
 
-- [Lint your file and folder structure](https://structurelint.adamczyk.ovh/docs/): what it does, install, comparison with ls-lint and eslint-plugin-project-structure
+- [Lint your file and folder structure](https://structurelint.adamczyk.ovh/docs/): what it does and how to install it
+- [Structurelint vs ls-lint vs eslint-plugin-project-structure](https://structurelint.adamczyk.ovh/docs/comparison): what each checks and when to pick which
 - [CLI options, exit codes and JSON output](https://structurelint.adamczyk.ovh/docs/cli): options, exit codes, --json and use in scripts
 - [Configuration file](https://structurelint.adamczyk.ovh/docs/configuration): structure.config.ts, discovery and top-level keys
 - [Folder and file rules, name templates and recursion](https://structurelint.adamczyk.ovh/docs/rules): describing a layout
+- [Folder structure recipes](https://structurelint.adamczyk.ovh/docs/recipes): copy-paste configs for React component folders, the Next.js App Router (dynamic segments and route groups) and monorepo packages, with the violations each reports
 - [Violations](https://structurelint.adamczyk.ovh/docs/violations): unexpected and missing entries, as text and JSON
 - [JavaScript API](https://structurelint.adamczyk.ovh/docs/javascript-api): lint(), validate(), format() and helpers
 - [Folder structure gate for AI agents and CI](https://structurelint.adamczyk.ovh/docs/ai-agents-and-ci): contract, CI example and an AGENTS.md snippet
@@ -49,4 +51,5 @@ Usage statistics: opt-in; the answer is stored as `stats` in structure.config. W
 - [Usage statistics](https://structurelint.adamczyk.ovh/docs/usage-statistics): the opt-in prompt and exactly what is sent
 - [GitHub repository](https://github.com/ladamczyk-it/structurelint): source, issues and CHANGELOG.md
 - [npm package](https://www.npmjs.com/package/@ladamczyk/structurelint): @ladamczyk/structurelint
-- [qoq](https://qoq.adamczyk.ovh/): the JavaScript/TypeScript quality suite that can run structurelint
+- [qoq](https://qoq.adamczyk.ovh/): the JavaScript/TypeScript quality suite that can run structurelint. llms.txt: https://qoq.adamczyk.ovh/llms.txt
+- [Sibling tools by the same author](https://adamczyk.ovh/llms.txt): Skillslint, Outdated, Justify-disable and qoq, each with its own llms.txt

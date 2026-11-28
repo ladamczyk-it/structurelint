@@ -69,19 +69,12 @@ It needs Node `^22.22.2`, `^24.15.0` or `>=26` and npm 10 or later. `.ts` config
 
 ## Compared with similar tools
 
-|                              | structurelint                                    | ls-lint                                  | eslint-plugin-project-structure                          |
-| ---------------------------- | ------------------------------------------------ | ---------------------------------------- | -------------------------------------------------------- |
-| What it validates            | which files and folders may exist at each level  | file and directory names                 | folder structure, imports between modules, file contents |
-| Required files and folders   | yes, `required: true`                            | counts per directory with `exists:N`     | yes, when a related file exists                          |
-| Reusable and recursive rules | yes, with a recursion limit                      | glob keys and parent-folder substitution | yes, with a depth limit                                  |
-| Needs ESLint                 | no                                               | no                                       | yes                                                      |
-| Config                       | `structure.config.ts` (or `.js`, `.mjs`, `.cjs`) | `.ls-lint.yml`                           | ESLint config                                            |
-
-ls-lint is the pick when only names matter; eslint-plugin-project-structure when the structure check should live inside ESLint alongside import rules. Structurelint was extracted from an ESLint structure rule so the check runs **in parallel** with the rest of your tooling, outside the ESLint pipeline.
+ls-lint checks file and directory names; eslint-plugin-project-structure checks folder structure and imports inside ESLint. Structurelint checks which entries may exist at each level and which are required, outside ESLint. See [Structurelint vs ls-lint vs eslint-plugin-project-structure](./comparison.md).
 
 ## Next steps
 
 - [Configuration](./configuration.md) and [Rules](./rules.md): describe your layout.
+- [Recipes](./recipes.md): ready-made layouts for React, Next.js App Router and monorepos.
 - [Command line](./cli.md): exit codes and `--json`.
 - [AI agents and CI](./ai-agents-and-ci.md): use it as a gate, with an `AGENTS.md` snippet.
 - [qoq integration](./qoq.md): run it inside `qoq --check`.

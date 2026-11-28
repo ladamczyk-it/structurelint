@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import Head from '@docusaurus/Head';
+import Link from '@docusaurus/Link';
 import { HomePage } from '@internal/docusaurus-theme/HomePage';
 
 import { StructureAnimation } from '../components/StructureAnimation';
@@ -44,6 +45,25 @@ const Home = (): ReactNode => (
       <meta content={DESCRIPTION} property="og:description" />
     </Head>
     <StructureAnimation />
+    <section className="container margin-vert--lg">
+      <h2>Standalone, or one check inside qoq</h2>
+      <p>
+        Run <code>npx structurelint</code> on its own, call <code>lint()</code> from Node, or turn
+        it on as a blocking check in <Link to="https://qoq.adamczyk.ovh/">qoq</Link>, the
+        JavaScript/TypeScript quality suite that runs ESLint, Prettier, Knip and more behind one
+        command. Published on npm as{' '}
+        <Link to="https://www.npmjs.com/package/@ladamczyk/structurelint">
+          @ladamczyk/structurelint
+        </Link>
+        .
+      </p>
+      <p>
+        Start from a <Link to="/docs/recipes">ready-made layout</Link> (React components, Next.js
+        App Router, a monorepo), or see how it{' '}
+        <Link to="/docs/comparison">compares with ls-lint and eslint-plugin-project-structure</Link>
+        .
+      </p>
+    </section>
   </HomePage>
 );
 
