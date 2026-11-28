@@ -2,6 +2,8 @@
 
 > Structurelint (@ladamczyk/structurelint) is a CLI and JavaScript API that validates an existing project's file and folder structure against rules you define. It flags every file or folder no rule allows and every required one that is missing, locally, in CI and in code AI coding agents write. It does not need ESLint and never scaffolds or generates code. It is an optional blocking check inside qoq.
 
+Full docs: https://structurelint.adamczyk.ovh/llms-full.txt (each page also as Markdown at <page URL>.md)
+
 Install and run: `npm install --save-dev @ladamczyk/structurelint` then `npx structurelint`, or `npx @ladamczyk/structurelint`. Needs Node ^22.22.2, ^24.15.0 or >=26 and npm 10+. `.ts` configs are transpiled with the project's own `typescript` package.
 
 Config: `structure.config.ts` (or .js, .mjs, .cjs), discovered from the current working directory up to the nearest folder with a package.json, default-exporting `{ structure, structureRoot?, ignorePatterns?, rules?, stats? }`. There is no --config flag. `node_modules` and `.git` are always ignored.
@@ -51,5 +53,5 @@ Usage statistics: opt-in; the answer is stored as `stats` in structure.config. W
 - [Usage statistics](https://structurelint.adamczyk.ovh/docs/usage-statistics): the opt-in prompt and exactly what is sent
 - [GitHub repository](https://github.com/ladamczyk-it/structurelint): source, issues and CHANGELOG.md
 - [npm package](https://www.npmjs.com/package/@ladamczyk/structurelint): @ladamczyk/structurelint
-- [qoq](https://qoq.adamczyk.ovh/): the JavaScript/TypeScript quality suite that can run structurelint. llms.txt: https://qoq.adamczyk.ovh/llms.txt
-- [Sibling tools by the same author](https://adamczyk.ovh/llms.txt): Skillslint, Outdated, Justify-disable and qoq, each with its own llms.txt
+- [Author's tools](https://adamczyk.ovh/llms.txt): hub llms.txt listing qoq and its sibling tools
+- [qoq](https://qoq.adamczyk.ovh/): the JavaScript/TypeScript quality suite that runs structurelint as an optional blocking check of qoq --check, enabled by a structurelint block in qoq.config.js; details on https://structurelint.adamczyk.ovh/docs/qoq. llms.txt: https://qoq.adamczyk.ovh/llms.txt
